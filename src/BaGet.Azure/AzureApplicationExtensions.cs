@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using BaGet.Azure;
 using BaGet.Core;
 using Microsoft.Azure.Cosmos.Table;
@@ -86,17 +88,22 @@ namespace BaGet
             app.Services.AddSingleton(provider =>
             {
                 var options = provider.GetRequiredService<IOptions<AzureBlobStorageOptions>>().Value;
-
-                if (!string.IsNullOrEmpty(options.ConnectionString))
+                var validationResults = new List<ValidationResult>();
+                if(Validator.TryValidateObject(options, new ValidationContext(options), validationResults, false))
                 {
-                    return CloudStorageAccount.Parse(options.ConnectionString);
+                    if (!string.IsNullOrEmpty(options.ConnectionString))
+                    {
+                        return CloudStorageAccount.Parse(Environment.GetEnvironmentVariable(options.ConnectionString));
+                    }
+
+                    return new CloudStorageAccount(
+                        new StorageCredentials(
+                            options.AccountName,
+                            Environment.GetEnvironmentVariable(options.AccessKey)),
+                        useHttps: true);
                 }
 
-                return new CloudStorageAccount(
-                    new StorageCredentials(
-                        options.AccountName,
-                        options.AccessKey),
-                    useHttps: true);
+                throw new ValidationException($"Error validating Azure Blob storage options");
             });
 
             app.Services.AddTransient(provider =>

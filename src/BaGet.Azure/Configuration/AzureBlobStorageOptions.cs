@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -34,7 +35,7 @@ namespace BaGet.Azure
         {
             const string helpUrl = "https://loic-sharma.github.io/BaGet/quickstart/azure/#azure-blob-storage";
 
-            if (string.IsNullOrEmpty(ConnectionString))
+            if (string.IsNullOrEmpty(ConnectionString) || string.IsNullOrEmpty(Environment.GetEnvironmentVariable(ConnectionString)))
             {
                 if (string.IsNullOrEmpty(AccountName))
                 {
@@ -43,7 +44,7 @@ namespace BaGet.Azure
                         new[] { nameof(AccountName) });
                 }
 
-                if (string.IsNullOrEmpty(AccessKey))
+                if (string.IsNullOrEmpty(AccessKey) || string.IsNullOrEmpty(Environment.GetEnvironmentVariable(AccessKey)))
                 {
                     yield return new ValidationResult(
                         $"The {nameof(AccessKey)} configuration is required. See {helpUrl}",

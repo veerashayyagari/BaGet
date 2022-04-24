@@ -22,9 +22,9 @@ namespace BaGet.Core
         private bool Authenticate(string apiKey)
         {
             // No authentication is necessary if there is no required API key.
-            if (_apiKey == null) return true;
+            if (_apiKey == null || string.IsNullOrEmpty(Environment.GetEnvironmentVariable(_apiKey))) return false;
 
-            return _apiKey == apiKey;
+            return Environment.GetEnvironmentVariable(_apiKey).Trim().ToLower() == apiKey.Trim().ToLower();
         }
     }
 }
