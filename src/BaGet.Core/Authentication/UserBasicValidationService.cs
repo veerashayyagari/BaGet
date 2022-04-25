@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BaGet.Core.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -18,7 +19,7 @@ namespace BaGet.Core.Authentication
 
         public bool IsValidUser(string username, string password)
         {
-            if(string.IsNullOrEmpty(Environment.GetEnvironmentVariable(PatTokenConfigSetting)))
+            if(string.IsNullOrEmpty(ConfigUtility.ReadEnvironmentVariable(PatTokenConfigSetting)))
             {
                 userSvcLogger.LogError($"Unable to find PAT token config setting: {PatTokenConfigSetting}");
                 throw new ArgumentNullException();
@@ -26,11 +27,10 @@ namespace BaGet.Core.Authentication
 
             try
             {
-                var basicAuthDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Environment.GetEnvironmentVariable(PatTokenConfigSetting));
-                username = username.Trim().ToLower();
-                password = password.Trim().ToLower();
+                var basicAuthDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(ConfigUtility.ReadEnvironmentVariable(PatTokenConfigSetting));
+                username = username.Trim().ToLower();                
 
-                if(basicAuthDictionary.ContainsKey(username) && basicAuthDictionary[username].Trim().ToLower().Equals(password))
+                if(basicAuthDictionary.ContainsKey(username) && basicAuthDictionary[username].Equals(password, StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }

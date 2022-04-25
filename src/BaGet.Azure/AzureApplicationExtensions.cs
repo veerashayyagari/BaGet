@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using BaGet.Azure;
 using BaGet.Core;
+using BaGet.Core.Configuration;
 using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Azure.Search;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,7 +35,7 @@ namespace BaGet
             {
                 var options = provider.GetRequiredService<IOptions<AzureTableOptions>>().Value;
 
-                return TableStorageAccount.Parse(options.ConnectionString);
+                return TableStorageAccount.Parse(ConfigUtility.ReadEnvironmentVariable(options.ConnectionString));
             });
 
             app.Services.AddTransient(provider =>
@@ -93,13 +94,13 @@ namespace BaGet
                 {
                     if (!string.IsNullOrEmpty(options.ConnectionString))
                     {
-                        return CloudStorageAccount.Parse(Environment.GetEnvironmentVariable(options.ConnectionString));
+                        return CloudStorageAccount.Parse(ConfigUtility.ReadEnvironmentVariable(options.ConnectionString));
                     }
 
                     return new CloudStorageAccount(
                         new StorageCredentials(
                             options.AccountName,
-                            Environment.GetEnvironmentVariable(options.AccessKey)),
+                            ConfigUtility.ReadEnvironmentVariable(options.AccessKey)),
                         useHttps: true);
                 }
 

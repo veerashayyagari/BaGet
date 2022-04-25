@@ -9,11 +9,11 @@ namespace BaGet
     {
         public void MapEndpoints(IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapRazorPages();
+            //endpoints.MapRazorPages();
 
             MapServiceIndexRoutes(endpoints);
             MapPackagePublishRoutes(endpoints);
-            MapSymbolRoutes(endpoints);
+            //MapSymbolRoutes(endpoints);
             MapSearchRoutes(endpoints);
             MapPackageMetadataRoutes(endpoints);
             MapPackageContentRoutes(endpoints);

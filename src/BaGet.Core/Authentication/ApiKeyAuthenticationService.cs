@@ -20,11 +20,10 @@ namespace BaGet.Core
             => Task.FromResult(Authenticate(apiKey));
 
         private bool Authenticate(string apiKey)
-        {
-            // No authentication is necessary if there is no required API key.
-            if (_apiKey == null || string.IsNullOrEmpty(Environment.GetEnvironmentVariable(_apiKey))) return false;
+        {            
+            if (_apiKey == null || string.IsNullOrEmpty(Configuration.ConfigUtility.ReadEnvironmentVariable(_apiKey)) || string.IsNullOrEmpty(apiKey)) return false;
 
-            return Environment.GetEnvironmentVariable(_apiKey).Trim().ToLower() == apiKey.Trim().ToLower();
+            return string.Equals(Configuration.ConfigUtility.ReadEnvironmentVariable(_apiKey),apiKey,StringComparison.OrdinalIgnoreCase);
         }
     }
 }

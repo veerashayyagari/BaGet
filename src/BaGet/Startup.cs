@@ -58,20 +58,20 @@ namespace BaGet
         {
             // Add database providers.
             app.AddAzureTableDatabase();
-            app.AddMySqlDatabase();
-            app.AddPostgreSqlDatabase();
-            app.AddSqliteDatabase();
-            app.AddSqlServerDatabase();
+            //app.AddMySqlDatabase();
+            //app.AddPostgreSqlDatabase();
+            //app.AddSqliteDatabase();
+            //app.AddSqlServerDatabase();
 
             // Add storage providers.
-            app.AddFileStorage();
-            app.AddAliyunOssStorage();
-            app.AddAwsS3Storage();
+            //app.AddFileStorage();
+            //app.AddAliyunOssStorage();
+            //app.AddAwsS3Storage();
             app.AddAzureBlobStorage();
-            app.AddGoogleCloudStorage();
+            //app.AddGoogleCloudStorage();
 
             // Add search providers.
-            app.AddAzureSearch();
+            //app.AddAzureSearch();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -85,11 +85,16 @@ namespace BaGet
                 app.UseStatusCodePages();
             }
 
+            app.UseHsts();
+            app.UseHttpsRedirection();
+
             app.UseForwardedHeaders();
             app.UsePathBase(options.PathBase);
 
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseCors(ConfigureBaGetOptions.CorsPolicy);
             app.UseOperationCancelledMiddleware();

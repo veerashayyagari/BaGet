@@ -2,12 +2,14 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using BaGet.Core;
+using BaGet.Web.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace BaGet.Web
 {
+    [BasicAuthentication]
     public class SymbolController : Controller
     {
         private readonly IAuthenticationService _authentication;

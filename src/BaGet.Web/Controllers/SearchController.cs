@@ -3,10 +3,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using BaGet.Core;
 using BaGet.Protocol.Models;
+using BaGet.Web.Filters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BaGet.Web
 {
+    [BasicAuthentication]
     public class SearchController : Controller
     {
         private readonly ISearchService _searchService;

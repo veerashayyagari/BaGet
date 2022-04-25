@@ -27,7 +27,7 @@ namespace BaGet.Azure
             CloudTableClient client,
             ILogger<TablePackageDatabase> logger)
         {
-            _operationBuilder = operationBuilder ?? throw new ArgumentNullException(nameof(operationBuilder));
+            _operationBuilder = operationBuilder ?? throw new ArgumentNullException(nameof(operationBuilder));            
             _table = client?.GetTableReference(TableName) ?? throw new ArgumentNullException(nameof(client));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
